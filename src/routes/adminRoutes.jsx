@@ -5,6 +5,7 @@ import PelangganPage from "../component/admin-page/pelangganPage/view";
 import OrderPage from "../component/admin-page/orderPage/view";
 import PenjualanPage from "../component/admin-page/penjualanPage/view";
 import ProdukPage from "../component/admin-page/produkPage/view";
+import AddPelanggan from "../component/admin-page/pelangganPage/addPelanggan/view";
 
 export default function AdminRoutes() {
   return (
@@ -15,6 +16,7 @@ export default function AdminRoutes() {
         <Route path="orders" element={<OrderPage />} />
         <Route path="penjualan" element={<PenjualanPage />} />
         <Route path="produk" element={<ProdukPage />} />
+        <Route path="add-pelanggan" element={<AddPelanggan />} />
       </Route>
     </Routes>
   );
