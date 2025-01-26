@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Box } from '@mui/material';
-import { login } from '../../store/endpoint/auth/authentication';  // Import fungsi login
+import { TextField, Button, Typography, Box, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { login } from '../../store/endpoint/auth/authentication';
 
 const LoginPageUI = () => {
-  const [email, setEmail] = useState(''); // Menggunakan email
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const response = await login(email, password); // Mengirim email dan password ke backend
+      const response = await login(email, password);
       if (response.redirect) {
-        // Simpan role dan status login di sessionStorage
-        sessionStorage.setItem('role', response.role); // Menyimpan role pengguna
-        sessionStorage.setItem('isAuthenticated', true); // Menyimpan status login
-        navigate(response.redirect); // Redirect sesuai role
-
-        console.log('Login berhasil! Redirecting to:', response.redirect);
+        sessionStorage.setItem('role', response.role);
+        sessionStorage.setItem('isAuthenticated', 'true');
+        
+        // Set login status to true and show success dialog
+        setIsLoggedIn(true);
+        setOpenSuccessDialog(true);
       }
     } catch (err) {
-      setError(err.message); // Menampilkan error jika login gagal
+      setError(err.message);
     }
+  };
+
+  const navigateToRole = (role) => {
+    if (role === 'ADMIN') {
+      navigate('/admin/dashboard', { replace: true });
+    } else if (role === 'PETUGAS') {
+      navigate('/petugas', { replace: true });
+    }
+  };
+
+  const handleSuccessDialogClose = () => {
+    const userRole = sessionStorage.getItem('role');
+    setOpenSuccessDialog(false); // Close the dialog
+    // Navigate only after dialog is closed
+    navigateToRole(userRole);
   };
 
   return (
@@ -31,9 +48,9 @@ const LoginPageUI = () => {
       {error && <Typography color="error">{error}</Typography>}
       <TextField
         fullWidth
-        label="Email"  // Menggunakan email
+        label="Email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}  // Mengatur state email
+        onChange={(e) => setEmail(e.target.value)}
         margin="normal"
       />
       <TextField
@@ -41,10 +58,21 @@ const LoginPageUI = () => {
         label="Password"
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}  // Mengatur state password
+        onChange={(e) => setPassword(e.target.value)}
         margin="normal"
       />
       <Button variant="contained" onClick={handleLogin} sx={{ mt: 2 }}>Login</Button>
+
+      {/* Success Dialog after login */}
+      <Dialog open={openSuccessDialog} onClose={handleSuccessDialogClose}>
+        <DialogTitle>Login Berhasil</DialogTitle>
+        <DialogContent>
+          <Typography>Anda berhasil masuk. Sistem akan membawa Anda ke halaman sesuai peran Anda.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSuccessDialogClose} color="primary">OK</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

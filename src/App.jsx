@@ -2,45 +2,48 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AdminRoutes from "./routes/adminRoutes";
 import PetugasRoutes from "./routes/petugasRoutes";
-// import LoginPage from './component/authentication/signIn';  // Halaman Login
 import LoginPageUI from './component/authentication/signIn';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    // Cek apakah user sudah login dari sessionStorage
-    const loggedIn = sessionStorage.getItem('isAuthenticated');
+    const loggedIn = sessionStorage.getItem('isAuthenticated') === 'true';
     const userRole = sessionStorage.getItem('role');
+
     if (loggedIn) {
       setIsAuthenticated(true);
-      setRole(userRole);
+      setRole(userRole || null);
+    } else {
+      setIsAuthenticated(false);
     }
-  }, []);
+  }, []); // This will run once when the component is mounted
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>; // Loading state while checking authentication
+  }
 
   return (
     <Router>
       <Routes>
-        {/* Rute untuk halaman login */}
+        {/* If not authenticated, show login page */}
         {!isAuthenticated && <Route path="/login" element={<LoginPageUI />} />}
         
-        {/* Rute untuk Admin */}
+        {/* If authenticated and role is ADMIN, show AdminRoutes */}
         {isAuthenticated && role === "ADMIN" && <Route path="/admin/*" element={<AdminRoutes />} />}
         
-        {/* Rute untuk Petugas */}
+        {/* If authenticated and role is PETUGAS, show PetugasRoutes */}
         {isAuthenticated && role === "PETUGAS" && <Route path="/petugas/*" element={<PetugasRoutes />} />}
-
-        {/* Redirect ke halaman login jika belum login */}
+        
+        {/* Default route, navigate based on role if authenticated */}
         <Route
           path="*"
-          element={
-            isAuthenticated ? (
-              <Navigate to={role === "ADMIN" ? "/admin/dashboard" : "/petugas"} replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
+          element={isAuthenticated ? (
+            <Navigate to={role === "ADMIN" ? "/admin/dashboard" : "/petugas"} replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )}
         />
       </Routes>
     </Router>
