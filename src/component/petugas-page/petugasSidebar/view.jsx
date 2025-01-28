@@ -70,7 +70,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export default function AdminSidebarPage() {
+export default function PetugasSidebarPage() {
   const [activeIndex, setActiveIndex] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setOpenDialog] = useState(false); 
@@ -79,11 +79,11 @@ export default function AdminSidebarPage() {
   const navigate = useNavigate();
 
   const menuItems = [
-    { text: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon /> },
-    { text: "Pelanggan", path: "/admin/pelanggan", icon: <PeopleIcon /> },
-    { text: "Produk", path: "/admin/produk", icon: <InventoryIcon /> },
-    { text: "Order", path: "/admin/orders", icon: <ReceiptIcon /> },
-    { text: "Penjualan", path: "/admin/penjualan", icon: <TrendingUpIcon /> },
+    { text: "Dashboard", path: "/petugas/dashboard", icon: <DashboardIcon /> },
+    { text: "Pelanggan", path: "/petugas/pelanggan", icon: <PeopleIcon /> },
+    { text: "Produk", path: "/petugas/produk", icon: <InventoryIcon /> },
+    { text: "Order", path: "/petugas/orders", icon: <ReceiptIcon /> },
+    { text: "Penjualan", path: "/petugas/penjualan", icon: <TrendingUpIcon /> },
   ];
 
   const handleMenuClick = (event) => {
@@ -100,6 +100,7 @@ export default function AdminSidebarPage() {
   };
 
   const handleLogout = () => {
+
     sessionStorage.clear(); 
     setOpenDialog(false); 
     setOpenSuccessDialog(true); 
@@ -116,7 +117,7 @@ export default function AdminSidebarPage() {
   const handleSuccessOk = () => {
     setTimeout(() => {
       navigate("/login", { replace: true });
-      setOpenSuccessDialog(false);
+      setOpenSuccessDialog(false); 
     }, 100); 
   };
   
@@ -138,7 +139,7 @@ export default function AdminSidebarPage() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ fontWeight: "bold" }}>
-            GoMart
+            GoMart Petugas
           </Typography>
         </Toolbar>
       </AppBar>

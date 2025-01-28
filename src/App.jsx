@@ -40,7 +40,7 @@ function App() {
         <Route
           path="*"
           element={isAuthenticated ? (
-            <Navigate to={role === "ADMIN" ? "/admin/dashboard" : "/petugas"} replace />
+            <Navigate to={role === "ADMIN" ? "/admin/dashboard" : "/petugas/dashboard"} replace />
           ) : (
             <Navigate to="/login" replace />
           )}

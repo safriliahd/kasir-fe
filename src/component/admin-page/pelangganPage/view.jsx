@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import GetAllPelanggan from './allPelanggan/view';
 import { Button, Box, Typography } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add'; // Icon untuk tombol Add
+import AddIcon from '@mui/icons-material/Add'; 
 import { light, teal } from '../../../theme/color';
 
 export default function PelangganPage() {
@@ -18,10 +18,10 @@ export default function PelangganPage() {
                         startIcon={<AddIcon />} 
                         sx={{
                             backgroundColor: teal[500],
-                            color: light[200], // Teks warna putih
+                            color: light[200],
                             '&:hover': {
-                                backgroundColor: teal[300], // Warna background saat hover
-                                color: light[100], // Teks tetap putih saat hover
+                                backgroundColor: teal[300], 
+                                color: light[100], 
                             }
                         }}
                     >

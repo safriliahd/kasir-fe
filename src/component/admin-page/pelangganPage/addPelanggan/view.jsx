@@ -1,6 +1,6 @@
 import { TextField, Button, Box, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { light, teal } from '../../../../theme/color';
 import { createPelangganApi } from '../../../../store/endpoint/pelanggan/pelangganEnd';
 
@@ -10,10 +10,10 @@ export default function AddPelanggan() {
         Alamat: '',
         NomorTelepon: '',
     });
-    const [loading, setLoading] = useState(false); // To track the loading state
-    const [error, setError] = useState(''); // To track any error messages
-    const [openDialog, setOpenDialog] = useState(false); // To control the dialog visibility
-    const navigate = useNavigate(); // Inisialisasi navigate
+    const [loading, setLoading] = useState(false); 
+    const [error, setError] = useState(''); 
+    const [openDialog, setOpenDialog] = useState(false); 
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,26 +24,25 @@ export default function AddPelanggan() {
     };
 
     const handleSubmit = async () => {
-        setLoading(true); // Start loading when submitting
-        setError(''); // Reset error state
+        setLoading(true); 
+        setError(''); 
         try {
             const pelanggan = await createPelangganApi(formData.NamaPelanggan, formData.Alamat, formData.NomorTelepon);
             console.log('Pelanggan created:', pelanggan);
-            setOpenDialog(true); // Open the dialog when the customer is successfully created
+            setOpenDialog(true); 
         } catch (error) {
-            setError(error.message); // Set error message if creation fails
+            setError(error.message); 
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false); 
         }
     };
 
     const handleCancel = () => {
-        // Navigasi kembali ke halaman sebelumnya
-        navigate(-1); // Ini akan membawa pengguna ke halaman sebelumnya
+        navigate(-1);
     };
 
     const handleDialogClose = () => {
-        navigate(-1); // Navigate back to the previous page when "Done" is clicked
+        navigate(-1);
     };
 
     return (
@@ -73,19 +72,19 @@ export default function AddPelanggan() {
                 fullWidth
                 margin="normal"
             />
-            {error && <Typography color="error" mt={2}>{error}</Typography>} {/* Display error message */}
+            {error && <Typography color="error" mt={2}>{error}</Typography>} 
             <Box mt={2} display="flex" justifyContent="flex-end">
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
-                    disabled={loading} // Disable button while loading
+                    disabled={loading} 
                     sx={{
                         backgroundColor: teal[500],
-                        color: light[200], // Teks warna putih
+                        color: light[200], 
                         '&:hover': {
-                            backgroundColor: teal[300], // Warna background saat hover
-                            color: light[100], // Teks tetap putih saat hover
+                            backgroundColor: teal[300], 
+                            color: light[100], 
                         }
                     }}
                 >
@@ -94,14 +93,14 @@ export default function AddPelanggan() {
                 <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={handleCancel} // Menambahkan tombol cancel
+                    onClick={handleCancel} 
                     sx={{
                         ml: 2,
                         borderColor: teal[500],
-                        color: teal[500], // Teks warna putih
+                        color: teal[500], 
                         '&:hover': {
-                            borderColor: teal[300], // Warna background saat hover
-                            color: teal[300], // Teks tetap putih saat hover
+                            borderColor: teal[300], 
+                            color: teal[300], 
                         }
                     }}
                 >

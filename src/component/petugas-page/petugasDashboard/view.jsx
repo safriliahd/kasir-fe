@@ -16,8 +16,8 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <h1>hidaaa</h1>
-      <div>Admin Dashboard Content</div>
+      <h1>Welcome</h1>
+      <div>Petugas Dashboard Content</div>
     </>
   );
 }
