@@ -9,7 +9,17 @@ export default function PelangganPage() {
     
     return (
         <>
-            <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+            <Box 
+            display="flex" 
+            justifyContent="space-between" 
+            alignItems="center" 
+            py={3}
+            px={2}
+            sx={{
+                maxHeight: '1vh',
+                overflow: 'hidden', // Prevent scrolling
+            }}
+            >
             <Typography variant="h4" gutterBottom sx={{fontWeight: 'bold'}}>Daftar Pelanggan</Typography>
                 <Link to="/admin/add-pelanggan" style={{ textDecoration: 'none' }}>
                     <Button 

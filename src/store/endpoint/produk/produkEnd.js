@@ -10,25 +10,30 @@ export const fetchProduk = async () => {
   }
 };
 
+// Fetch produk by ID
+export const fetchProdukById = async (produkId) => {
+  try {
+    const response = await API_URL.get(`/admin/produk/${produkId}`);
+    return response.data; // Returns the fetched produk data
+  } catch (error) {
+    throw new Error('Error fetching produk by ID: ' + error.message);
+  }
+};
+
+
 // Create produk
-export const createProdukApi = async (NamaProduk, Harga, Stok, FotoProduk) => {
-    try {
-      const formData = new FormData();
-      formData.append('NamaProduk', NamaProduk);
-      formData.append('Harga', Harga);
-      formData.append('Stok', Stok);
-      formData.append('FotoProduk', FotoProduk);
-  
-      const response = await API_URL.post('/admin/createProduk', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-  
-      return response.data; // Returns the created produk data
-    } catch (error) {
-      console.error('Error creating produk:', error.response ? error.response.data : error.message);
-      throw new Error('Error creating produk: ' + (error.response?.data?.message || error.message));
-    }
-  };
+export const createProdukApi = async (formData) => {
+  try {
+    const response = await API_URL.post('/admin/createProduk', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data; // Returns the created produk data
+  } catch (error) {
+    console.error('Error creating produk:', error.response ? error.response.data : error.message);
+    throw new Error('Error creating produk: ' + (error.response?.data?.message || error.message));
+  }
+};
+
   
 
 // Update produk
