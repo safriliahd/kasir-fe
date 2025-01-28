@@ -138,7 +138,7 @@ export default function AdminSidebarPage() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ fontWeight: "bold" }}>
-            GoMart
+            GoMart Admin
           </Typography>
         </Toolbar>
       </AppBar>
