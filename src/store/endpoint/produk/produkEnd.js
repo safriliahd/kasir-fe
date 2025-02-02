@@ -4,7 +4,7 @@ import API_URL from "../../api/api";
 export const fetchProduk = async () => {
   try {
     const response = await API_URL.get('/admin/allProduk');
-    return response.data; // Returns the fetched produk data
+    return response.data; 
   } catch (error) {
     throw new Error('Error fetching produk: ' + error.message);
   }
@@ -14,7 +14,7 @@ export const fetchProduk = async () => {
 export const fetchProdukById = async (produkId) => {
   try {
     const response = await API_URL.get(`/admin/produk/${produkId}`);
-    return response.data; // Returns the fetched produk data
+    return response.data; 
   } catch (error) {
     throw new Error('Error fetching produk by ID: ' + error.message);
   }
@@ -27,7 +27,7 @@ export const createProdukApi = async (formData) => {
     const response = await API_URL.post('/admin/createProduk', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    return response.data; // Returns the created produk data
+    return response.data; 
   } catch (error) {
     console.error('Error creating produk:', error.response ? error.response.data : error.message);
     throw new Error('Error creating produk: ' + (error.response?.data?.message || error.message));
@@ -54,7 +54,7 @@ export const editProduk = async (produkId, updatedData, FotoProduk) => {
       },
     });
 
-    return response.data; // Returns the updated produk data
+    return response.data;
   } catch (error) {
     console.error('Error creating produk:', error.response || error.message);
     throw new Error('Error creating produk: ' + (error.response?.data?.message || error.message));
@@ -66,7 +66,7 @@ export const editProduk = async (produkId, updatedData, FotoProduk) => {
 export const deleteProduk = async (produkId) => {
   try {
     const response = await API_URL.delete(`/admin/deleteProduk/${produkId}`);
-    return response.data.message; // Returns success message
+    return response.data.message; 
   } catch (error) {
     throw new Error('Error deleting produk: ' + error.message);
   }

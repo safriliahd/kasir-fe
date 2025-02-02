@@ -20,12 +20,12 @@ import {
     DialogTitle,
     Button,
     TextField,
+    TablePagination,
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { deletePelanggan, editPelanggan, fetchPelanggan } from '../../../../store/endpoint/petugas/pelangganPetugas/pelangganEnd';
 
-
-export default function GetAllPelangganPetugas() {
+export default function GetAllPelanggan() {
     const [pelanggan, setPelanggan] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,6 +34,10 @@ export default function GetAllPelangganPetugas() {
     const [selectedPelangganId, setSelectedPelangganId] = useState(null);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [formData, setFormData] = useState({ NamaPelanggan: '', Alamat: '', NomorTelepon: '' });
+
+    // Pagination state
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     useEffect(() => {
         const getPelanggan = async () => {
@@ -101,6 +105,15 @@ export default function GetAllPelangganPetugas() {
         setSelectedPelangganId(null);
     };
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
     const headerCellStyle = {
         fontWeight: 'bold',
         textAlign: 'center',
@@ -133,31 +146,36 @@ export default function GetAllPelangganPetugas() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {pelanggan.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={5} align="center">Tidak ada pelanggan tersedia</TableCell>
+                        {pelanggan.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((p) => (
+                            <TableRow key={p.PelangganID}>
+                                <TableCell sx={{ textAlign: 'center' }}>{p.PelangganID}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>{p.NamaPelanggan}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>{p.Alamat}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>{p.NomorTelepon}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>
+                                    <IconButton onClick={() => handleEdit(p.PelangganID)} color="primary">
+                                        <Edit sx={{ color: 'teal' }} />
+                                    </IconButton>
+                                    <IconButton onClick={() => openDeleteDialog(p.PelangganID)} color="secondary">
+                                        <Delete sx={{ color: 'red' }} />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
-                        ) : (
-                            pelanggan.map((p) => (
-                                <TableRow key={p.PelangganID}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{p.PelangganID}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{p.NamaPelanggan}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{p.Alamat}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{p.NomorTelepon}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <IconButton onClick={() => handleEdit(p.PelangganID)} color="primary">
-                                            <Edit sx={{ color: 'teal' }} />
-                                        </IconButton>
-                                        <IconButton onClick={() => openDeleteDialog(p.PelangganID)} color="secondary">
-                                            <Delete sx={{ color: 'red' }} />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            {/* Table Pagination */}
+            <TablePagination
+                rowsPerPageOptions={[5,10, 25, 100]}
+                component="div"
+                count={pelanggan.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
 
             {/* Dialog for editing pelanggan */}
             <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
