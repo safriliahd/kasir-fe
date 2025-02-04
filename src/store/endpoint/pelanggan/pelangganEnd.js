@@ -3,7 +3,7 @@ import API_URL from "../../api/api";
 export const fetchPelanggan = async () => {
   try {
     const response = await API_URL.get('/admin/allPelanggan');
-    return response.data.pelanggan;  // Return the fetched pelanggan data
+    return response.data.pelanggan;  
   } catch (error) {
     throw new Error('Error fetching pelanggan: ' + error.message);
   }
@@ -28,7 +28,7 @@ export const createPelangganApi = async (NamaPelanggan, Alamat, NomorTelepon) =>
 export const deletePelanggan = async (pelangganId) => {
   try {
     const response = await API_URL.delete(`/admin/deletePelanggan/${pelangganId}`);
-    return response.data.message; // Returns success message
+    return response.data.message; 
   } catch (error) {
     throw new Error('Error deleting pelanggan: ' + error.message);
   }
@@ -38,7 +38,7 @@ export const deletePelanggan = async (pelangganId) => {
 export const editPelanggan = async (pelangganId, updatedData) => {
   try {
     const response = await API_URL.put(`/admin/updatePelanggan/${pelangganId}`, updatedData);
-    return response.data.pelanggan; // Returns the updated pelanggan
+    return response.data.pelanggan;
   } catch (error) {
     throw new Error('Error updating pelanggan: ' + error.message);
   }

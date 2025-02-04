@@ -38,7 +38,7 @@ const ProductList = ({ onAddToOrder }) => {
                 alt={product.NamaProduk}
               />
               <CardContent>
-                <Typography variant="h6">{product.NamaProduk}</Typography>
+                <Typography variant="body1">{product.NamaProduk}</Typography>
                 <Typography variant="body2">Rp {product.Harga}</Typography>
                 <Typography variant="body2">Stok : {product.Stok}</Typography>
                 <Button

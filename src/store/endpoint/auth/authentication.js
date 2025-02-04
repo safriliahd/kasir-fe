@@ -3,12 +3,12 @@ import API_URL from '../../api/api';
 
 export const login = async (email, password) => {
   try {
-    const response = await API_URL.post('/auth/login', {  // Menggunakan instance API
+    const response = await API_URL.post('/auth/login', {  
       email,
       password,
-    }, { withCredentials: true });  // Menggunakan withCredentials untuk session
+    }, { withCredentials: true });  
 
-    return response.data;  // Mengembalikan respons backend
+    return response.data;  
   } catch (error) {
     throw new Error(error.response?.data?.error || 'Login failed');
   }

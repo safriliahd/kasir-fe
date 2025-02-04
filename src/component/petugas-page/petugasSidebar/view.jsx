@@ -208,7 +208,7 @@ export default function PetugasSidebarPage() {
             sx={{ bgcolor: teal[500], cursor: "pointer", mx: "auto" }}
             onClick={handleMenuClick}
           >
-            A
+            P
           </Avatar>
           <Menu
             anchorEl={anchorEl}

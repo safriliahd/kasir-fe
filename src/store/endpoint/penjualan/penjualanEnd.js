@@ -1,22 +1,9 @@
-import API_URL from "../../../api/api";
-
-// Create a new order
-export const createOrder = async (orderData) => {
-    try {
-        const response = await API_URL.post('/petugas/createOrder', orderData, {
-            withCredentials: true,
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error('Error creating order: ' + error.message);
-    }
-};
-
+import API_URL from "../../api/api";
 
 // Fetch all orders
 export const fetchAllOrders = async () => {
     try {
-        const response = await API_URL.get('/petugas/allOrders');
+        const response = await API_URL.get('/admin/allOrders');
         return response.data;
     } catch (error) {
         throw new Error('Error fetching orders: ' + error.message);
@@ -26,7 +13,7 @@ export const fetchAllOrders = async () => {
 // Delete an order by PenjualanID
 export const deleteOrderByPenjualanID = async (penjualanID) => {
     try {
-        const response = await API_URL.delete(`/petugas/deleteOrder/${penjualanID}`);
+        const response = await API_URL.delete(`/admin/deleteOrder/${penjualanID}`);
         return response.data;
     } catch (error) {
         throw new Error('Error deleting order: ' + error.message);
@@ -36,7 +23,7 @@ export const deleteOrderByPenjualanID = async (penjualanID) => {
 // Fetch all penjualan
 export const fetchAllPenjualanAPI = async () => {
     try {
-        const response = await API_URL.get('/petugas/allPenjualan');
+        const response = await API_URL.get('/admin/allPenjualan');
         return response.data;
     } catch (error) {
         throw new Error('Error fetching penjualan: ' + error.message);
@@ -46,7 +33,7 @@ export const fetchAllPenjualanAPI = async () => {
 // Fetch penjualan by ID
 export const fetchPenjualanById = async (penjualanID) => {
     try {
-        const response = await API_URL.get(`/petugas/penjualan/${penjualanID}`);
+        const response = await API_URL.get(`/admin/penjualan/${penjualanID}`);
         return response.data;
     } catch (error) {
         throw new Error('Error fetching penjualan by ID: ' + error.message);
@@ -56,7 +43,7 @@ export const fetchPenjualanById = async (penjualanID) => {
 // Fetch detail penjualan by ID
 export const fetchDetailPenjualanById = async (penjualanID) => {
     try {
-        const response = await API_URL.get(`/petugas/detailPenjualan/${penjualanID}`, {
+        const response = await API_URL.get(`/admin/detailPenjualan/${penjualanID}`, {
             params: { include: { produk: true } }  
         });
         return response.data;

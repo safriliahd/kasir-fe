@@ -111,6 +111,7 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
 
   const handleCloseWarningDialog = () => {
     setOpenWarningDialog(false);
+  };
 
   return (
     <Card sx={{ maxHeight: '100vh', overflowY: 'auto', paddingLeft: 0, }}>

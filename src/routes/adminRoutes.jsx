@@ -14,7 +14,7 @@ export default function AdminRoutes() {
       <Route path="/" element={<AdminSidebarPage />}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="pelanggan" element={<PelangganPage />} />
-        <Route path="orders" element={<OrderPage />} />
+        {/* <Route path="orders" element={<OrderPage />} /> */}
         <Route path="penjualan" element={<PenjualanPage />} />
         <Route path="produk" element={<ProdukPage />} />
         <Route path="add-pelanggan" element={<AddPelanggan />} />

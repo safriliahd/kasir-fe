@@ -1,13 +1,10 @@
-// export default function PenjualanPage() {
-//     (
-//         <>
-//             <h2>admin Penjualan page</h2>
-//         </>
-//     )
-// }
+import AllPenjualanPageAdmin from "./allPenjualan/view";
 
 export default function PenjualanPage() {
-    console.log("Rendering PenjualanPage");
-    return <div>PenjualanPage Content</div>;
-  }
-  
+  console.log("Rendering PenjualanPage");
+  return (
+    <>
+      <AllPenjualanPageAdmin />
+    </>
+  );
+}

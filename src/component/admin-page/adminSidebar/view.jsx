@@ -82,7 +82,7 @@ export default function AdminSidebarPage() {
     { text: "Dashboard", path: "/admin/dashboard", icon: <DashboardIcon /> },
     { text: "Pelanggan", path: "/admin/pelanggan", icon: <PeopleIcon /> },
     { text: "Produk", path: "/admin/produk", icon: <InventoryIcon /> },
-    { text: "Order", path: "/admin/orders", icon: <ReceiptIcon /> },
+    // { text: "Order", path: "/admin/orders", icon: <ReceiptIcon /> },
     { text: "Penjualan", path: "/admin/penjualan", icon: <TrendingUpIcon /> },
   ];
 
