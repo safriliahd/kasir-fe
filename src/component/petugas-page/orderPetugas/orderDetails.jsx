@@ -54,17 +54,23 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
 
     const currentDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
-    const totalHarga = orderItems.reduce((total, item) => total + (item.Harga * (item.JumlahProduk || 1)), 0);
+    const totalHarga = orderItems.reduce((total, item) => {
+      const itemTotal = item.Harga * (item.JumlahProduk || 1);
+      console.log("Item Harga:", item.Harga, "Jumlah Produk:", item.JumlahProduk, "Total Item:", itemTotal);
+      return total + itemTotal;
+    }, 0);
+    
 
     const orderData = {
       PelangganID: selectedPelanggan.PelangganID,
       TanggalPenjualan: currentDate, 
       products: orderItems.map((item) => ({
         ProdukID: item.ProdukID,
-        JumlahProduk: item.JumlahProduk || 1,
+        JumlahProduk: parseInt(item.JumlahProduk) || 1,
         Harga: item.Harga * (item.JumlahProduk || 1),
       })),
     };
+    
 
     try {
       const response = await createOrder(orderData);
