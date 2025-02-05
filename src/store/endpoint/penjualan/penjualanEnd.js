@@ -11,7 +11,7 @@ export const fetchAllOrders = async () => {
 };
 
 // Delete an order by PenjualanID
-export const deleteOrderByPenjualanID = async (penjualanID) => {
+export const deleteOrderByPenjualanIDAdmin = async (penjualanID) => {
     try {
         const response = await API_URL.delete(`/admin/deleteOrder/${penjualanID}`);
         return response.data;
@@ -21,7 +21,7 @@ export const deleteOrderByPenjualanID = async (penjualanID) => {
 };
 
 // Fetch all penjualan
-export const fetchAllPenjualanAPI = async () => {
+export const fetchAllPenjualanAPIAdmin = async () => {
     try {
         const response = await API_URL.get('/admin/allPenjualan');
         return response.data;
@@ -41,7 +41,7 @@ export const fetchPenjualanById = async (penjualanID) => {
 };
 
 // Fetch detail penjualan by ID
-export const fetchDetailPenjualanById = async (penjualanID) => {
+export const fetchDetailPenjualanByIdAdmin = async (penjualanID) => {
     try {
         const response = await API_URL.get(`/admin/detailPenjualan/${penjualanID}`, {
             params: { include: { produk: true } }  
