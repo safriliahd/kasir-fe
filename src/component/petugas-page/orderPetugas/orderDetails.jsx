@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Card, CardContent, Typography, Button, List, ListItem, ListItemText, Divider,
-  Dialog, DialogTitle, DialogContent, DialogActions, IconButton
+  Dialog, DialogTitle, DialogContent, DialogActions, IconButton, TextField
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,10 +13,11 @@ import { createOrder } from "../../../store/endpoint/petugas/order-penjualan-det
 export default function OrderDetails({ orderItems, setOrderItems }) {
   const [selectedPelanggan, setSelectedPelanggan] = useState(null);
   const [pelanggan, setPelanggan] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  const [openWarningDialog, setOpenWarningDialog] = useState(false); 
-  const [warningMessage, setWarningMessage] = useState(""); 
+  const [openWarningDialog, setOpenWarningDialog] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,126 +38,66 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
     setOrderItems(updatedOrder);
   };
 
-  const handleSubmitOrder = async () => {
-    if (!selectedPelanggan && orderItems.length === 0) {
-      setWarningMessage("Silakan tambahkan pelanggan dan produk terlebih dahulu.");
+  const handleConfirmOrder = () => {
+    if (!selectedPelanggan || orderItems.length === 0) {
+      setWarningMessage(
+        !selectedPelanggan
+          ? "Silakan pilih pelanggan terlebih dahulu."
+          : "Silakan tambahkan produk ke order terlebih dahulu."
+      );
       setOpenWarningDialog(true);
       return;
-    } else if (!selectedPelanggan) {
-      setWarningMessage("Silakan pilih pelanggan terlebih dahulu.");
-      setOpenWarningDialog(true); 
-      return;
-    } else if (orderItems.length === 0) {
-      setWarningMessage("Silakan tambahkan produk ke order terlebih dahulu.");
-      setOpenWarningDialog(true); 
-      return;
     }
+    setOpenConfirmationDialog(true);
+  };
 
-    const currentDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
-
-    const totalHarga = orderItems.reduce((total, item) => {
-      const itemTotal = item.Harga * (item.JumlahProduk || 1);
-      console.log("Item Harga:", item.Harga, "Jumlah Produk:", item.JumlahProduk, "Total Item:", itemTotal);
-      return total + itemTotal;
-    }, 0);
-    
-
+  const handleSubmitOrder = async () => {
+    const currentDate = new Date().toISOString().split("T")[0];
     const orderData = {
       PelangganID: selectedPelanggan.PelangganID,
-      TanggalPenjualan: currentDate, 
+      TanggalPenjualan: currentDate,
       products: orderItems.map((item) => ({
         ProdukID: item.ProdukID,
         JumlahProduk: parseInt(item.JumlahProduk) || 1,
         Harga: item.Harga * (item.JumlahProduk || 1),
       })),
     };
-    
 
     try {
-      const response = await createOrder(orderData);
-      console.log("Response from backend:", response);
-
+      await createOrder(orderData);
       setOrderItems([]);
       alert("Pesanan berhasil dibuat!");
-
-      const { penjualan } = response;
-      console.log("PenjualanID from backend:", penjualan.PenjualanID);
-
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const handleConfirmOrder = () => {
-    if (!selectedPelanggan && orderItems.length === 0) {
-      setWarningMessage("Silakan tambahkan pelanggan dan produk terlebih dahulu.");
-      setOpenWarningDialog(true);
-      return;
-    } else if (!selectedPelanggan) {
-      setWarningMessage("Silakan pilih pelanggan terlebih dahulu.");
-      setOpenWarningDialog(true); 
-      return;
-    } else if (orderItems.length === 0) {
-      setWarningMessage("Silakan tambahkan produk ke order terlebih dahulu.");
-      setOpenWarningDialog(true); 
-      return;
-    }
-
-    setOpenConfirmationDialog(true); 
-  };
-
-
-  const handleCloseConfirmationDialog = () => {
-    setOpenConfirmationDialog(false);
-  };
-
-  const handleProceedOrder = () => {
-    handleSubmitOrder(); 
-    setOpenConfirmationDialog(false); 
-  };
-
-  const handleCloseWarningDialog = () => {
-    setOpenWarningDialog(false);
-  };
+  const filteredPelanggan = pelanggan.filter((p) =>
+    p.NamaPelanggan.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <Card sx={{ maxHeight: '100vh', overflowY: 'auto', paddingLeft: 0, }}>
+    <Card sx={{ maxHeight: '100vh', overflowY: 'auto', paddingLeft: 0 }}>
       <CardContent>
         <Typography variant="h6" sx={{ fontWeight: 'bold', pb: 2 }}>Detail Order</Typography>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
-          <Button
-            variant="outlined"
-            onClick={() => setOpenDialog(true)}
-            sx={{
-              borderColor: teal[500],
-              color: teal[500],
-              "&:hover": {
-                borderColor: teal[300],
-              },
-              marginRight: 2,
-              borderWidth: 2,
-            }}
-          >
-            Pilih Pelanggan
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{
-              backgroundColor: teal[500],
-              color: "#fff",
-              "&:hover": {
-                backgroundColor: teal[300]
-              }
-            }}
-            onClick={() => navigate("/petugas/add-pelanggan")}
-          >
-            Add Pelanggan
-          </Button>
-        </div>
+        <Button
+          variant="outlined"
+          onClick={() => setOpenDialog(true)}
+          sx={{ borderColor: teal[500], color: teal[500], marginRight: 2 }}
+        >
+          Pilih Pelanggan
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          sx={{ backgroundColor: teal[500], color: "#fff" }}
+          onClick={() => navigate("/petugas/add-pelanggan")}
+        >
+          Add Pelanggan
+        </Button>
 
         {selectedPelanggan && (
-          <Typography variant="subtitle1" sx={{ marginBottom: 2 }}>
+          <Typography variant="subtitle1" sx={{ marginTop: 2 }}>
             Pelanggan: {selectedPelanggan.NamaPelanggan} ({selectedPelanggan.Alamat})
           </Typography>
         )}
@@ -165,58 +106,29 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
           {orderItems.map((item, index) => (
             <React.Fragment key={index}>
               <ListItem secondaryAction={<Button onClick={() => handleRemoveItem(index)}>Hapus</Button>}>
-                <ListItemText
-                  primary={item.NamaProduk}
-                  secondary={`Rp ${item.Harga} x ${item.JumlahProduk || 1} = Rp ${item.Harga * (item.JumlahProduk || 1)}`}
-                />
+                <ListItemText primary={item.NamaProduk} secondary={`Rp ${item.Harga} x ${item.JumlahProduk || 1} = Rp ${item.Harga * (item.JumlahProduk || 1)}`} />
               </ListItem>
               <Divider />
             </React.Fragment>
           ))}
         </List>
 
+        {/* Total Harga */}
+        <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'left', marginY: 2 }}>
+          Total Harga: Rp {orderItems.reduce((total, item) => total + item.Harga * (item.JumlahProduk || 1), 0)}
+        </Typography>
+
         <Button
           variant="contained"
           fullWidth
           onClick={handleConfirmOrder}
-          sx={{
-            backgroundColor: teal[500],
-            color: "#fff",
-            "&:hover": {
-              backgroundColor: teal[300]
-            }
-          }}
+          sx={{ backgroundColor: teal[500], color: "#fff" }}
         >
           Konfirmasi Order
         </Button>
       </CardContent>
 
-      {/* Warning Dialog */}
-      <Dialog open={openWarningDialog} onClose={handleCloseWarningDialog} fullWidth maxWidth="sm">
-        <DialogTitle>Peringatan</DialogTitle>
-        <DialogContent>
-          <Typography>{warningMessage}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseWarningDialog}>Tutup</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Konfirmasi Order Dialog */}
-      <Dialog open={openConfirmationDialog} onClose={handleCloseConfirmationDialog} fullWidth maxWidth="sm">
-        <DialogTitle>Konfirmasi Pesanan</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Apakah Anda yakin ingin melakukan pesanan ini? Pastikan data pelanggan dan produk sudah benar.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseConfirmationDialog}>Batal</Button>
-          <Button onClick={handleProceedOrder} color="primary">Ya, Lanjutkan</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Pelanggan Dialog */}
+      {/* Dialog Pilih Pelanggan */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle>
           Pilih Pelanggan
@@ -225,17 +137,25 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <List>
-            {pelanggan.map((p) => (
-              <ListItem
-                button
-                key={p.PelangganID}
-                onClick={() => { setSelectedPelanggan(p); setOpenDialog(false); }}
-              >
-                <ListItemText primary={p.NamaPelanggan} secondary={p.Alamat} />
-              </ListItem>
-            ))}
-          </List>
+          <TextField
+            label="Cari Pelanggan"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {filteredPelanggan.length > 0 ? (
+            <List>
+              {filteredPelanggan.map((p) => (
+                <ListItem button key={p.PelangganID} onClick={() => { setSelectedPelanggan(p); setOpenDialog(false); }}>
+                  <ListItemText primary={p.NamaPelanggan} secondary={p.Alamat} />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography variant="body2" sx={{ textAlign: "center", marginTop: 2 }}>Tidak ada pelanggan yang ditemukan.</Typography>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Batal</Button>

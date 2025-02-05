@@ -47,9 +47,9 @@ export default function OrderPagePetugas() {
   };
 
   return (
-    <div style={{ maxHeight: "100vh", overflowY: "auto", padding: 0 }}>
+    <div style={{ maxHeight: "100vh", overflowY: "auto", padding: 0}}>
       {/* Search Bar di kiri */}
-      <div style={{ display: "flex", width: "100%", justifyContent: "flex-start" }}>
+      <div style={{ display: "flex", width: "100%", justifyContent: "flex-start", paddingBottom: 5  }}>
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
