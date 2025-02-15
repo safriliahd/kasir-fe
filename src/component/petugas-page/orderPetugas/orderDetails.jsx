@@ -22,6 +22,8 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
   const [openNewPelanggan, setOpenNewPelanggan] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openStockWarning, setOpenStockWarning] = useState(false);
+  const [outOfStockItems, setOutOfStockItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +54,15 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
       setOpenWarningDialog(true);
       return;
     }
+
+    // Validasi stok sebelum mengonfirmasi order
+    const insufficientStock = orderItems.filter(item => item.JumlahProduk > item.Stok);
+    if (insufficientStock.length > 0) {
+      setOutOfStockItems(insufficientStock);
+      setOpenStockWarning(true);
+      return;
+    }
+    
     setOpenConfirmationDialog(true);
   };
 
@@ -251,6 +262,24 @@ export default function OrderDetails({ orderItems, setOrderItems }) {
         <DialogActions>
           <Button onClick={handleSubmitOrder} variant="contained" sx={{ backgroundColor: teal[500], color: "#fff" }}>Ya</Button>
           <Button onClick={() => setOpenConfirmationDialog(false)}>Batal</Button>
+        </DialogActions>
+      </Dialog>
+
+        {/* Dialog Peringatan Stok Habis */}
+        <Dialog open={openStockWarning} onClose={() => setOpenStockWarning(false)} fullWidth maxWidth="sm">
+        <DialogTitle>Peringatan Stok Tidak Cukup</DialogTitle>
+        <DialogContent>
+          <Typography>Beberapa produk memiliki stok tidak mencukupi:</Typography>
+          <List>
+            {outOfStockItems.map((item, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={`${item.NamaProduk} - Stok tersedia: ${item.Stok}, diminta: ${item.JumlahProduk}`} />
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenStockWarning(false)}>Tutup</Button>
         </DialogActions>
       </Dialog>
 

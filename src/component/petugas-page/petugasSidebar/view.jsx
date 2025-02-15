@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import MuiAppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import {
@@ -71,12 +71,13 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PetugasSidebarPage() {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setOpenDialog] = useState(false); 
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false); 
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
 
   const menuItems = [
     { text: "Dashboard", path: "/petugas/dashboard", icon: <DashboardIcon /> },
@@ -85,6 +86,11 @@ export default function PetugasSidebarPage() {
     { text: "Order", path: "/petugas/orders", icon: <ReceiptIcon /> },
     { text: "Penjualan", path: "/petugas/penjualan", icon: <TrendingUpIcon /> },
   ];
+
+    useEffect(() => {
+      const currentIndex = menuItems.findIndex((item) => item.path === location.pathname);
+      setActiveIndex(currentIndex !== -1 ? currentIndex : 0); // Jika tidak cocok, default ke Dashboard
+    }, [location.pathname]);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);

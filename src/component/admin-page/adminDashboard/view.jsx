@@ -1,23 +1,41 @@
-import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Grid, Typography, Box } from "@mui/material";
+import LeftSideAdmin from "./LeftSideAdmin";
+import RightSideAdmin from "./RightSideAdmin";
 
 export default function AdminDashboard() {
   const isAuthenticated = sessionStorage.getItem("isAuthenticated");
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      window.location.href = "/login"; 
-    }
-  }, [isAuthenticated]);
-
   if (!isAuthenticated) {
+    window.location.href = "/login";
     return null;
   }
 
   return (
-    <>
-      <h1>hidaaa</h1>
-      <div>Admin Dashboard Content</div>
-    </>
+    <Box
+      sx={{
+        overflow: "hidden", 
+        display: "flex",
+        flexDirection: "column",
+        padding: 2, 
+        bgcolor: "background.default",
+        gap: 2, 
+      }}
+    >
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ fontWeight: "bold", textAlign: "left" }}
+      >
+        Admin Dashboard
+      </Typography>
+
+      <Grid item xs={12}>
+        <LeftSideAdmin />
+      </Grid>
+
+      <Grid item xs={12}>
+        <RightSideAdmin />
+      </Grid>
+    </Box>
   );
 }
